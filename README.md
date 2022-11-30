@@ -5,6 +5,7 @@ A C# application to generate the Mandelbrot fractal with interactive controls us
 
 - Middle Mouse Click: Move Around
 - Scroll Wheel: Zoom In/Out
+- Left Shift + Scroll: Change number of iterations
 
 ### Final image with color texture applied
 
