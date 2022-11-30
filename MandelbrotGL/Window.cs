@@ -15,6 +15,8 @@ namespace MandelbrotGL
 
         private float scale = 2.0f;
         private Vector2 center = new Vector2(-3.0f / 4.0f, 0.0f);
+        private double centerX = -3.0d / 4.0d;
+        private double centerY = 0.0d;
         private int maxIterations = 100;
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings())
@@ -54,10 +56,10 @@ namespace MandelbrotGL
                 GLFW.SetInputMode(WindowPtr, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
 
                 // Set the translations speed when moving arround
-                var translationSpeed = 0.003f * scale;
+                var translationSpeed = 0.003d * scale;
 
-                center.X -= e.DeltaX * translationSpeed;
-                center.Y += e.DeltaY * translationSpeed;
+                centerX -= e.DeltaX * translationSpeed;
+                centerY += e.DeltaY * translationSpeed;
             }
             else
             {
@@ -122,11 +124,13 @@ namespace MandelbrotGL
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            float windowAspect = (float)ClientSize.X / (float)ClientSize.Y;
+            double windowAspect = (double)ClientSize.X / (double)ClientSize.Y;
 
             GL.UseProgram(shaderProgram);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "windowAspect"), windowAspect);
             GL.Uniform2(GL.GetUniformLocation(shaderProgram, "center"), center);
+            GL.Uniform1(GL.GetUniformLocation(shaderProgram, "centerX"), centerX);
+            GL.Uniform1(GL.GetUniformLocation(shaderProgram, "centerY"), centerY);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "scale"), scale);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "maxIterations"), maxIterations);
 
