@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace MandelbrotGL
 {
@@ -17,8 +18,6 @@ namespace MandelbrotGL
         private float scale = 2.0f;
         private Vector2 center = new Vector2(-3.0f / 4.0f, 0.0f);
         private int maxIterations = 1000;
-
-        private bool dragScreen;
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings())
         {
@@ -40,30 +39,20 @@ namespace MandelbrotGL
             base.OnMouseWheel(e);
         }
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            dragScreen = true;
-            CursorVisible = false;
-
-            base.OnMouseDown(e);
-        }
-
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            dragScreen = false;
-            CursorVisible = true;
-
-            base.OnMouseUp(e);
-        }
-
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            if (dragScreen)
+            if (MouseState.IsButtonDown(MouseButton.Middle))
             {
+                CursorVisible = false;
+
                 var translationSpeed = 0.003f * scale;
 
                 center.X -= e.DeltaX * translationSpeed;
                 center.Y += e.DeltaY * translationSpeed;
+            }
+            else
+            {
+                CursorVisible = true;
             }
 
             base.OnMouseMove(e);
