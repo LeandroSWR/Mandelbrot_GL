@@ -1,7 +1,8 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -39,11 +40,12 @@ namespace MandelbrotGL
             base.OnMouseWheel(e);
         }
 
-        protected override void OnMouseMove(MouseMoveEventArgs e)
+        
+        protected unsafe override void OnMouseMove(MouseMoveEventArgs e)
         {
             if (MouseState.IsButtonDown(MouseButton.Middle))
             {
-                CursorVisible = false;
+                GLFW.SetInputMode(WindowPtr, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
 
                 var translationSpeed = 0.003f * scale;
 
@@ -52,7 +54,7 @@ namespace MandelbrotGL
             }
             else
             {
-                CursorVisible = true;
+                GLFW.SetInputMode(WindowPtr, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
             }
 
             base.OnMouseMove(e);
