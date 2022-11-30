@@ -5,50 +5,44 @@ uniform float windowAspect;
 uniform vec2 center;
 uniform float scale;
 uniform int maxIterations;
-uniform sampler2D colorTexture;
 
 varying vec2 pixelPosition;
 
 out vec4 fragColor;
 
-int runMandelbrotIterations(vec2 c)
+vec4 mapColor(float mcol) {
+    return vec4(0.5 + 0.5*cos(2.7+mcol*30.0 + vec3(0.0,.6,1.0)),1.0);
+}
+
+vec2 complexMult(vec2 a, vec2 b) {
+	return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
+}
+
+float iterateMandelbrot(vec2 coord)
 {
-	vec2 z = c;
+	vec2 testPoint = vec2(0,0);
 
-	int n;
-
-	for (n = 0; n < maxIterations; ++n)
-	{
-		z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c; // Mandelbrot Equation
-
-		if (length(z) > 2.0)
-		{
-			break; // If it's higher than 2 then it's outsize.
+	for (int i = 0; i < maxIterations; i++){
+		testPoint = complexMult(testPoint,testPoint) + coord;
+        float ndot = dot(testPoint,testPoint);
+		if (ndot > 7.0) {
+            float sl = float(i) - log2(log2(ndot))+4.0;
+			return sl*.0025;
 		}
 	}
-
-	return n;
+	return 0.0;
 }
 
 void main()
 {
-	vec2 c = vec2(
+	vec2 fragment = vec2(
 		windowAspect * pixelPosition.x * scale + center.x,
 		pixelPosition.y * scale + center.y
 	);
 
-	int n = runMandelbrotIterations(c);
+	const vec2 zoomP = vec2(-.7451544,.1853);
 
-	if (n == maxIterations)
-	{
-		// When we hit max iterations we consider the pixel to be inside so
-		// we give it a black color
-		fragColor = vec4(0.0, 0.0, 0.0, 0.0);
-	}
-	else
-	{
-		// When Z is outside the parameters give the pixel a color from the given texture
-		// Chose the color based of the number of iterations performed to get to a value higher than 2
-		fragColor = texture(colorTexture, vec2(n / float(maxIterations), 0.0));
-	}
+	vec4 outs = vec4(0.0);
+
+	fragColor = mapColor(iterateMandelbrot(fragment));
 } 
