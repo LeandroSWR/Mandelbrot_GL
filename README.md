@@ -10,3 +10,13 @@ A C# application to generate the Mandelbrot fractal with interactive controls us
 ### Final image with color texture applied
 
 ![alt text](https://raw.githubusercontent.com/xShadoWalkeR/Mandelbrot_GL/main/final.png)
+
+### Other zoomed renders
+
+![alt text](https://raw.githubusercontent.com/xShadoWalkeR/Mandelbrot_GL/main/render_1.png)
+
+![alt text](https://raw.githubusercontent.com/xShadoWalkeR/Mandelbrot_GL/main/render_2.png)
+
+![alt text](https://raw.githubusercontent.com/xShadoWalkeR/Mandelbrot_GL/main/render_3.png)
+
+![alt text](https://raw.githubusercontent.com/xShadoWalkeR/Mandelbrot_GL/main/render_4.png)
