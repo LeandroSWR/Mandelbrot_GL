@@ -18,6 +18,8 @@ namespace MandelbrotGL
         private Vector2 center = new Vector2(-3.0f / 4.0f, 0.0f);
         private int maxIterations = 1000;
 
+        private bool dragScreen;
+
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings())
         {
             this.CenterWindow(new Vector2i(1280, 720));
@@ -28,6 +30,43 @@ namespace MandelbrotGL
             GL.Viewport(0, 0, e.Width, e.Height);
 
             base.OnResize(e);
+        }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            // Zoom in/out
+            scale *= (1.0f - e.OffsetY * 0.05f);
+
+            base.OnMouseWheel(e);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            dragScreen = true;
+            CursorVisible = false;
+
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            dragScreen = false;
+            CursorVisible = true;
+
+            base.OnMouseUp(e);
+        }
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            if (dragScreen)
+            {
+                var translationSpeed = 0.003f * scale;
+
+                center.X -= e.DeltaX * translationSpeed;
+                center.Y += e.DeltaY * translationSpeed;
+            }
+
+            base.OnMouseMove(e);
         }
 
         protected override void OnLoad()
