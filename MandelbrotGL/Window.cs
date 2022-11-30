@@ -15,7 +15,7 @@ namespace MandelbrotGL
 
         private float scale = 2.0f;
         private Vector2 center = new Vector2(-3.0f / 4.0f, 0.0f);
-        private int maxIterations = 3000;
+        private int maxIterations = 100;
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings())
         {
@@ -31,9 +31,17 @@ namespace MandelbrotGL
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            // Zoom in/out
-            scale *= (1.0f - e.OffsetY * 0.05f);
-
+            if (KeyboardState.IsKeyDown(Keys.LeftShift))
+            {
+                // Change the max iterations
+                maxIterations = Math.Max(2, maxIterations + (int)e.OffsetY * 10);
+            }
+            else
+            {
+                // Zoom in/out
+                scale *= (1.0f - e.OffsetY * 0.05f);
+            }
+            
             base.OnMouseWheel(e);
         }
 

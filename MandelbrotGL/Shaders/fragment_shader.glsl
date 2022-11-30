@@ -11,12 +11,13 @@ varying vec2 pixelPosition;
 out vec4 fragColor;
 
 vec4 mapColor(float mcol) {
-    return vec4(0.5 + 0.5*cos(2.7+mcol*30.0 + vec3(0.0,.6,1.0)),1.0);
+    return vec4(0.5 + 0.5*cos(2.7+mcol*30.0 + vec3(1.0,0.5,0.0)),1.0);
 }
 
 vec2 complexMult(vec2 a, vec2 b) {
 	return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
 }
+
 
 float iterateMandelbrot(vec2 coord)
 {
@@ -39,10 +40,6 @@ void main()
 		windowAspect * pixelPosition.x * scale + center.x,
 		pixelPosition.y * scale + center.y
 	);
-
-	const vec2 zoomP = vec2(-.7451544,.1853);
-
-	vec4 outs = vec4(0.0);
 
 	fragColor = mapColor(iterateMandelbrot(fragment));
 } 
