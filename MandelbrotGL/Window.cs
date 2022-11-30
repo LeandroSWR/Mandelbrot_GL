@@ -14,7 +14,6 @@ namespace MandelbrotGL
         private int shaderProgram;
 
         private float scale = 2.0f;
-        private Vector2 center = new Vector2(-3.0f / 4.0f, 0.0f);
         private double centerX = -3.0d / 4.0d;
         private double centerY = 0.0d;
         private int maxIterations = 100;
@@ -128,7 +127,6 @@ namespace MandelbrotGL
 
             GL.UseProgram(shaderProgram);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "windowAspect"), windowAspect);
-            GL.Uniform2(GL.GetUniformLocation(shaderProgram, "center"), center);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "centerX"), centerX);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "centerY"), centerY);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "scale"), scale);
