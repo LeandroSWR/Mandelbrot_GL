@@ -1,18 +1,10 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
-using OpenTK.Windowing.Desktop;
-using System;
-
-namespace MandelbrotGL
+﻿namespace MandelbrotGL
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            GameWindowSettings gameWindowSettings = new GameWindowSettings();
-            NativeWindowSettings nativeWindowSettings = new NativeWindowSettings();
-
+            // Creates a new OpenGL window and runs it
             new Window(800, 600, "Mandlebrot").Run();
         }
     }
