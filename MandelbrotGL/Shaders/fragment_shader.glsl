@@ -5,6 +5,7 @@ uniform float windowAspect;
 uniform vec2 center;
 uniform float scale;
 uniform int maxIterations;
+uniform sampler2D colorTexture;
 
 varying vec2 pixelPosition;
 
@@ -46,7 +47,8 @@ void main()
 	}
 	else
 	{
-		// When Z is outside the parameters give the pixel a white color
-		fragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		// When Z is outside the parameters give the pixel a color from the given texture
+		// Chose the color based of the number of iterations performed to get to a value higher than 2
+		fragColor = texture(colorTexture, vec2(n / float(maxIterations), 0.0));
 	}
 } 

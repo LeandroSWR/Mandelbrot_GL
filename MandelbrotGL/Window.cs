@@ -1,7 +1,4 @@
-﻿using System;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Mathematics;
+﻿using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -15,6 +12,7 @@ namespace MandelbrotGL
         private int vArrayH;
 
         private int shaderProgram;
+        private int colorTexture;
 
         private float scale = 2.0f;
         private Vector2 center = new Vector2(-3.0f / 4.0f, 0.0f);
@@ -45,8 +43,10 @@ namespace MandelbrotGL
         {
             if (MouseState.IsButtonDown(MouseButton.Middle))
             {
+                // Hide the mouse cursor
                 GLFW.SetInputMode(WindowPtr, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
 
+                // Set the translations speed when moving arround
                 var translationSpeed = 0.003f * scale;
 
                 center.X -= e.DeltaX * translationSpeed;
@@ -54,6 +54,7 @@ namespace MandelbrotGL
             }
             else
             {
+                // Show the mouse cursor
                 GLFW.SetInputMode(WindowPtr, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
             }
 
@@ -90,6 +91,7 @@ namespace MandelbrotGL
             GL.BindVertexArray(0);
 
             shaderProgram = ShaderFactory.CreateProgram("Shaders/vertex_shader.glsl", "Shaders/fragment_shader.glsl");
+            colorTexture = TextureFactory.Create("colors.bmp", false);
 
             base.OnLoad();
         }
@@ -121,7 +123,15 @@ namespace MandelbrotGL
             GL.Uniform2(GL.GetUniformLocation(shaderProgram, "center"), center);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "scale"), scale);
             GL.Uniform1(GL.GetUniformLocation(shaderProgram, "maxIterations"), maxIterations);
+            
+            // Bind Texture
+            GL.Uniform1(GL.GetUniformLocation(shaderProgram, "colorTexture"), 0);
+            GL.ActiveTexture(TextureUnit.Texture0 + 0);
+            GL.BindTexture(TextureTarget.Texture2D, colorTexture);
+
+            // Bind Vertex Array Object
             GL.BindVertexArray(vArrayH);
+            // Draw
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
             this.Context.SwapBuffers();
