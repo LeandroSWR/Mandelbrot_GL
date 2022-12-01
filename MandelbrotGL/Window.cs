@@ -18,6 +18,11 @@ namespace MandelbrotGL
         private double centerY = 0.0d;
         private int maxIterations = 100;
 
+        private double prevTime = 0.0;
+        private double currentTime = 0.0;
+        private double timeDiff;
+        private int counter = 0;
+
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings())
         {
             this.CenterWindow(new Vector2i(1280, 720));
@@ -119,9 +124,27 @@ namespace MandelbrotGL
             base.OnUpdateFrame(args);
         }
 
+        private unsafe void CheckPerformance()
+        {
+            currentTime = GLFW.GetTime();
+            timeDiff = currentTime - prevTime;
+            counter++;
+            if (timeDiff >= 1.0 / 30.0)
+            {
+                GLFW.SetWindowTitle(this.WindowPtr, $"MandelbrotGL | " +
+                    $"{((1.0 / timeDiff) * counter).ToString("0.00")}fps | " +
+                    $"{((timeDiff / counter) * 1000).ToString("0.00")}ms");
+
+                prevTime = currentTime;
+                counter = 0;
+            }
+        }
+
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            CheckPerformance();
 
             double windowAspect = (double)ClientSize.X / (double)ClientSize.Y;
 

@@ -29,16 +29,22 @@ float iterateMandelbrot(f64vec2 coord)
 
 	for (int i = 0; i < maxIterations; i++)
 	{
+		// Calculate the mandelbrot equation
 		currentPoint = complexMult(currentPoint,currentPoint) + coord;
+
+		// Calculate the dot of the vec2 over it self to check if the current pixel is outside of the set
         double ndot = dot(currentPoint,currentPoint);
+
 		// If it's outside of the set
 		if (ndot > 7.0)
 		{
 			// Smooth values for better color representation later
             float64_t sl = float64_t(i) - log2(log2(float(ndot)))+4.0;
+
 			return float(sl * 0.0025);
 		}
 	}
+
 	// If it's inside the set return 0.0 (black)
 	return 0.0;
 }
@@ -50,5 +56,6 @@ void main()
 		pixelPosition.y * scale + centerY
 	);
 
+	;
 	fragColor = mapColor(iterateMandelbrot(fragment));
 } 
